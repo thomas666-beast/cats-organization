@@ -1,22 +1,24 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
+use App\Services\CatService;
+use App\Models\CatRepository;
 use App\Database\Connection;
-use App\Models\Model;
 
-class DatabaseTest extends TestCase {
-    private $model;
+class CatServiceTest extends TestCase {
+    private $service;
     private $createdIds = []; // Track created IDs for cleanup
 
     protected function setUp(): void {
-        // Initialize the database connection
-        $this->model = new Model('cats');
+        // Initialize the service
+        $repository = new CatRepository();
+        $this->service = new CatService($repository);
     }
 
     protected function tearDown(): void {
         // Clean up created rows
         foreach ($this->createdIds as $id) {
-            $this->model->delete($id);
+            $this->service->deleteCat($id);
         }
         $this->createdIds = []; // Reset the list
     }
@@ -29,14 +31,14 @@ class DatabaseTest extends TestCase {
             'mother_id' => null
         ];
 
-        $id = $this->model->create($data);
+        $id = $this->service->createCat($data);
         $this->assertIsInt($id);
 
         // Track the created ID for cleanup
         $this->createdIds[] = $id;
     }
 
-    public function testFindCat() {
+    public function testGetCatById() {
         $data = [
             'name' => 'Fluffy',
             'gender' => 'female',
@@ -44,10 +46,10 @@ class DatabaseTest extends TestCase {
             'mother_id' => null
         ];
 
-        $id = $this->model->create($data);
+        $id = $this->service->createCat($data);
         $this->createdIds[] = $id; // Track the created ID
 
-        $cat = $this->model->find($id);
+        $cat = $this->service->getCatById($id);
 
         $this->assertEquals('Fluffy', $cat['name']);
         $this->assertEquals('female', $cat['gender']);
@@ -61,14 +63,14 @@ class DatabaseTest extends TestCase {
             'mother_id' => null
         ];
 
-        $id = $this->model->create($data);
+        $id = $this->service->createCat($data);
         $this->createdIds[] = $id; // Track the created ID
 
-        $updated = $this->model->update($id, ['age' => 5]);
+        $updated = $this->service->updateCat($id, ['age' => 5]);
 
-        $this->assertEquals(1, $updated);
+        $this->assertTrue($updated);
 
-        $cat = $this->model->find($id);
+        $cat = $this->service->getCatById($id);
         $this->assertEquals(5, $cat['age']);
     }
 
@@ -80,14 +82,14 @@ class DatabaseTest extends TestCase {
             'mother_id' => null
         ];
 
-        $id = $this->model->create($data);
+        $id = $this->service->createCat($data);
         $this->createdIds[] = $id; // Track the created ID
 
-        $deleted = $this->model->delete($id);
+        $deleted = $this->service->deleteCat($id);
 
-        $this->assertEquals(1, $deleted);
+        $this->assertTrue($deleted);
 
-        $cat = $this->model->find($id);
+        $cat = $this->service->getCatById($id);
         $this->assertFalse($cat);
     }
 }
