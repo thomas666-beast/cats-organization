@@ -1,0 +1,36 @@
+# PHP specific
+/vendor/
+*.log
+*.cache
+*.tmp
+*.phar
+*.sql
+*.sqlite
+*.db
+
+# IDE specific
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Composer files
+composer.lock
+
+# PHPUnit
+phpunit.xml
+phpunit.xml.dist
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Other
+/public/storage
+/public/hot
+/public/mix-manifest.json
