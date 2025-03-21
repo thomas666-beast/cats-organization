@@ -10,13 +10,18 @@
     <body>
         <div class="container">
             <header class="my-4">
-                <h1>Cat Accounting</h1>
+                <h1><?= \App\Core\Translator::trans('Cat Organization') ?></h1>
                 <nav class="navbar navbar-expand-lg navbar-light bg-light">
                     <div class="container-fluid">
-                        <a class="navbar-brand" href="/cats">Home</a>
-                        <a class="nav-link" href="/cats/create">Add Cat</a>
+                        <a class="navbar-brand" href="/cats"><?= \App\Core\Translator::trans('Home') ?></a>
+                        <a class="nav-link" href="/cats/create"><?=\App\Core\Translator::trans('Add a New Cat')?></a>
                     </div>
                 </nav>
+
+                <div class="language-switcher mt-3">
+                    <a href="/change-locale/en" class="btn btn-sm btn-outline-primary">English</a>
+                    <a href="/change-locale/ru" class="btn btn-sm btn-outline-primary">Русский</a>
+                </div>
             </header>
 
             <!-- Display Notifications -->
@@ -32,14 +37,5 @@
             </footer>
         </div>
         <script src="/assets/js/bootstrap.bundle.min.js"></script>
-        <script>
-            // Automatically dismiss alerts after 5 seconds
-            setTimeout(() => {
-                document.querySelectorAll('.alert').forEach(alert => {
-                    alert.classList.remove('show');
-                    alert.classList.add('fade');
-                });
-            }, 5000);
-        </script>
     </body>
 </html>

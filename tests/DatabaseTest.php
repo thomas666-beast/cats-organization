@@ -5,19 +5,18 @@ use App\Database\Connection;
 use App\Models\Model;
 
 class DatabaseTest extends TestCase {
-    private $model;
-    private $createdIds = []; // Track created IDs for cleanup
+    private Model $model;
+    private array $createdIds = [];
 
     protected function setUp(): void {
-        // Initialize the database connection
         $this->model = new Model('cats');
     }
 
     protected function tearDown(): void {
-        // Clean up created rows
         foreach ($this->createdIds as $id) {
             $this->model->delete($id);
         }
+
         $this->createdIds = []; // Reset the list
     }
 
@@ -30,9 +29,7 @@ class DatabaseTest extends TestCase {
         ];
 
         $id = $this->model->create($data);
-        $this->assertIsInt($id);
-
-        // Track the created ID for cleanup
+        $this->assertIsInt((int)$id);
         $this->createdIds[] = $id;
     }
 
@@ -45,7 +42,7 @@ class DatabaseTest extends TestCase {
         ];
 
         $id = $this->model->create($data);
-        $this->createdIds[] = $id; // Track the created ID
+        $this->createdIds[] = $id;
 
         $cat = $this->model->find($id);
 
@@ -62,7 +59,7 @@ class DatabaseTest extends TestCase {
         ];
 
         $id = $this->model->create($data);
-        $this->createdIds[] = $id; // Track the created ID
+        $this->createdIds[] = $id;
 
         $updated = $this->model->update($id, ['age' => 5]);
 
@@ -81,7 +78,7 @@ class DatabaseTest extends TestCase {
         ];
 
         $id = $this->model->create($data);
-        $this->createdIds[] = $id; // Track the created ID
+        $this->createdIds[] = $id;
 
         $deleted = $this->model->delete($id);
 

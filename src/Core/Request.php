@@ -8,7 +8,6 @@ class Request {
     public static function getPostData(): array {
         unset($_POST['csrf_token']);
 
-        // Recursively apply htmlspecialchars to all values
         $sanitize = function ($value) use (&$sanitize) {
             if (is_array($value)) {
                 return array_map($sanitize, $value);

@@ -3,7 +3,6 @@
 namespace App\Core;
 
 use App\Models\Model;
-
 class Validator
 {
     public static function validateRequired(array $data, array $requiredFields): void
@@ -18,7 +17,8 @@ class Validator
     public static function validateUnique($table, $field, $value)
     {
         $model = new Model($table);
-        $result = $model->all(); // Fetch all records (optimize with a WHERE clause)
+        $result = $model->all();
+
         foreach ($result as $record) {
             if ($record[$field] === $value) {
                 throw new \Exception("$field must be unique.");

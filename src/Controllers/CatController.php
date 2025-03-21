@@ -11,8 +11,8 @@ class CatController {
     public function __construct(CatService $service) {
         $this->service = $service;
     }
-
-    public function index() {
+    public function index(): void
+    {
         $page = $_GET['page'] ?? 1;
         $perPage = 10;
         $search = $_GET['search'] ?? '';
@@ -21,7 +21,6 @@ class CatController {
         $gender = $_GET['gender'] ?? '';
 
         if ($search) {
-            // Handle search
             $cats = $this->service->searchByName($search, $page, $perPage);
             $totalCats = $this->service->countByName($search);
         } else {
@@ -71,7 +70,8 @@ class CatController {
         include __DIR__ . '/../Views/cats/create.php';
     }
 
-    public function edit($id) {
+    public function edit($id): void
+    {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             try {
                 Request::validateCsrfToken();
@@ -105,7 +105,8 @@ class CatController {
         include __DIR__ . '/../Views/cats/edit.php';
     }
 
-    public function delete($id) {
+    public function delete($id): void
+    {
         try {
             $this->service->deleteCat($id);
             setNotification('success', 'Cat deleted successfully!');
@@ -117,7 +118,8 @@ class CatController {
         exit;
     }
 
-    public function show($id) {
+    public function show($id): void
+    {
         $cat = $this->service->getCatById($id);
 
         if (!$cat) {

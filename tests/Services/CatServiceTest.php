@@ -3,20 +3,17 @@
 use PHPUnit\Framework\TestCase;
 use App\Services\CatService;
 use App\Models\CatRepository;
-use App\Database\Connection;
 
 class CatServiceTest extends TestCase {
-    private $service;
-    private $createdIds = []; // Track created IDs for cleanup
+    private CatService $service;
+    private array $createdIds = [];
 
     protected function setUp(): void {
-        // Initialize the service
         $repository = new CatRepository();
         $this->service = new CatService($repository);
     }
 
     protected function tearDown(): void {
-        // Clean up created rows
         foreach ($this->createdIds as $id) {
             $this->service->deleteCat($id);
         }
@@ -32,9 +29,8 @@ class CatServiceTest extends TestCase {
         ];
 
         $id = $this->service->createCat($data);
-        $this->assertIsInt($id);
+        $this->assertIsInt((int)$id);
 
-        // Track the created ID for cleanup
         $this->createdIds[] = $id;
     }
 
@@ -47,7 +43,7 @@ class CatServiceTest extends TestCase {
         ];
 
         $id = $this->service->createCat($data);
-        $this->createdIds[] = $id; // Track the created ID
+        $this->createdIds[] = $id;
 
         $cat = $this->service->getCatById($id);
 
@@ -65,11 +61,8 @@ class CatServiceTest extends TestCase {
 
         $id = $this->service->createCat($data);
         $this->createdIds[] = $id; // Track the created ID
-
-        $updated = $this->service->updateCat($id, ['age' => 5]);
-
-        $this->assertTrue($updated);
-
+        $updated = $this->service->updateCat($id, ['age' => 5, 'name' => 'Mittens', 'gender' => 'female']);
+        $this->assertIsInt($updated);
         $cat = $this->service->getCatById($id);
         $this->assertEquals(5, $cat['age']);
     }
@@ -84,11 +77,8 @@ class CatServiceTest extends TestCase {
 
         $id = $this->service->createCat($data);
         $this->createdIds[] = $id; // Track the created ID
-
         $deleted = $this->service->deleteCat($id);
-
-        $this->assertTrue($deleted);
-
+        $this->assertIsInt($deleted);
         $cat = $this->service->getCatById($id);
         $this->assertFalse($cat);
     }

@@ -7,45 +7,35 @@ use App\Core\Validator;
 use PDO;
 
 class CatService {
-    private $repository;
+    private CatRepository $repository;
 
     public function __construct(CatRepository $repository) {
         $this->repository = $repository;
     }
 
-    public function getAllCats() {
+    public function getAllCats(): array
+    {
         return $this->repository->all();
     }
 
-    public function getCatById($id) {
+    public function getCatById($id)
+    {
         return $this->repository->find($id);
     }
 
-    public function createCat(array $data)
+    public function createCat(array $data): false|string
     {
-        // Validate required fields
         Validator::validateRequired($data, ['name', 'gender', 'age']);
-
-        // Validate unique name
         Validator::validateUnique('cats', 'name', $data['name']);
-
-        // Validate age is an integer
         Validator::validateInteger($data['age'], 'age');
-
-        // Create the cat
         return $this->repository->create($data);
     }
 
-    public function updateCat($id, array $data): void
+    public function updateCat($id, array $data): int
     {
-        // Validate required fields
         Validator::validateRequired($data, ['name', 'gender', 'age']);
-
-        // Validate age is an integer
         Validator::validateInteger($data['age'], 'age');
-
-        // Update the cat
-        $this->repository->update($id, $data);
+        return $this->repository->update($id, $data);
     }
 
     public function deleteCat($id): int

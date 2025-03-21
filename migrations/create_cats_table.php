@@ -17,7 +17,8 @@ $connection->exec("
         age INT NOT NULL,
         mother_id INT NULL,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+        FOREIGN KEY (mother_id) REFERENCES cats(id) ON DELETE SET NULL
     )
 ");
 
@@ -27,9 +28,9 @@ $connection->exec("
         cat_id INT NOT NULL,
         father_id INT NOT NULL,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        FOREIGN KEY (cat_id) REFERENCES cats(id),
-        FOREIGN KEY (father_id) REFERENCES cats(id)
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+        FOREIGN KEY (cat_id) REFERENCES cats(id) ON DELETE CASCADE,
+        FOREIGN KEY (father_id) REFERENCES cats(id) ON DELETE CASCADE
     )
 ");
 

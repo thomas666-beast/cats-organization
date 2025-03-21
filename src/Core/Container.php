@@ -3,7 +3,7 @@
 namespace App\Core;
 
 class Container {
-    private $bindings = [];
+    private array $bindings = [];
 
     public function bind($key, $resolver): void
     {

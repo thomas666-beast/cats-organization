@@ -3,7 +3,7 @@
 namespace App\Core;
 
 class Logger {
-    private $logFile;
+    private string $logFile;
 
     public function __construct($logFile = 'app.log') {
         // Define the logs directory path
@@ -18,7 +18,8 @@ class Logger {
         $this->logFile = $logsDir . '/' . $logFile;
     }
 
-    public function log($message) {
+    public function log($message): void
+    {
         $timestamp = date('Y-m-d H:i:s');
         $logMessage = "[$timestamp] $message" . PHP_EOL;
         file_put_contents($this->logFile, $logMessage, FILE_APPEND);

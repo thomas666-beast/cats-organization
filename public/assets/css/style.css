@@ -2,3 +2,18 @@
 body {
     padding: 20px;
 }
+
+.language-switcher {
+    text-align: right;
+    margin-bottom: 20px;
+}
+
+.language-switcher a {
+    margin: 0 5px;
+    text-decoration: none;
+}
+
+.language-switcher a.btn {
+    padding: 5px 10px;
+    font-size: 14px;
+}

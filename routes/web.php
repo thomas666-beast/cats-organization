@@ -1,9 +1,11 @@
 <?php
 
+use App\Controllers\LocaleController;
 use App\Core\Router;
 use App\Controllers\CatController;
 
 return function (Router $router) {
+    $router->add('GET', '/change-locale/{locale}', LocaleController::class, 'change');
     $router->add('GET', '/', CatController::class, 'index');
     $router->add('GET', '/cats', CatController::class, 'index');
     $router->add('GET', '/cats/create', CatController::class, 'create');
@@ -14,3 +16,4 @@ return function (Router $router) {
     $router->add('GET', '/cats/show/{id}', CatController::class, 'show');
     $router->add('GET', '/cats/filter', CatController::class, 'filter');
 };
+

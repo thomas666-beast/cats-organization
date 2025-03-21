@@ -1,15 +1,12 @@
 <?php
-
-// Start the session
 session_start();
 
-// Require Composer's autoloader
 require __DIR__ . '/vendor/autoload.php';
 
-// Initialize the database connection
 use App\Core\Logger;
+use App\Core\Translator;
+use App\Database\Connection;
 
-// Load environment variables (if using a .env file)
 if (file_exists(__DIR__ . '/.env')) {
     $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
     $dotenv->load();
@@ -17,26 +14,22 @@ if (file_exists(__DIR__ . '/.env')) {
     throw new \Exception('.env file not found.');
 }
 
-// Initialize the database connection
-use App\Database\Connection;
+$locale = $_SESSION['locale'] ?? 'en'; // Default to English
+Translator::load($locale);
+
 Connection::getInstance();
 
-
-// Generate a CSRF token if it doesn't exist
 if (empty($_SESSION['csrf_token'])) {
     $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 }
 
-// Create the logs directory if it doesn't exist
 $logsDir = __DIR__ . '/../logs';
 if (!is_dir($logsDir)) {
     mkdir($logsDir, 0755, true);
 }
 
-// Initialize the logger
 $logger = new Logger();
 
-// Set up error and exception handling
 set_error_handler(function ($errno, $errstr, $errfile, $errline) use ($logger) {
     $logger->log("Error: $errstr in $errfile on line $errline");
     throw new \ErrorException($errstr, 0, $errno, $errfile, $errline);
@@ -50,7 +43,10 @@ set_exception_handler(function ($exception) use ($logger) {
 
 function setNotification($type, $message): void
 {
-    $_SESSION['notifications'][] = ['type' => $type, 'message' => $message];
+    $_SESSION['notifications'][] = [
+        'type' => $type,
+        'message' => \App\Core\Translator::trans($message)
+    ];
 }
 
 function displayNotifications(): void
@@ -62,7 +58,6 @@ function displayNotifications(): void
                 . '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>'
                 . '</div>';
         }
-        // Clear notifications after displaying them
         unset($_SESSION['notifications']);
     }
 }
